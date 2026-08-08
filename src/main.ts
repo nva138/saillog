@@ -1,5 +1,4 @@
 import { createApp } from 'vue'
-import { addTrip, getTrips, deleteTrip } from '@/utils/storage.ts'
 import App from './App.vue'
 import router from './router';
 
@@ -34,7 +33,6 @@ import '@ionic/vue/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import {storage} from "@/utils/storage";
 
 const app = createApp(App)
   .use(IonicVue)
@@ -42,18 +40,4 @@ const app = createApp(App)
 
 router.isReady().then(() => {
   app.mount('#app');
-
-    const testTrip: Trip = {
-        id: Date.now(), // Erzeugt automatisch eine einzigartige ID
-        name: "Spanien Urlaub",
-        eventDate: "15.09.2026",
-        startingTime: "06:30",
-        finishingTime: "11:45"
-    };
-
-    addTrip(testTrip);
-    console.log(getTrips());
-    deleteTrip(1786227620607);
-    localStorage.clear()
-
 });
