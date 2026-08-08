@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import { addTrip, getTrips, deleteTrip } from '@/utils/storage.ts'
 import App from './App.vue'
 import router from './router';
 
@@ -42,17 +43,17 @@ const app = createApp(App)
 router.isReady().then(() => {
   app.mount('#app');
 
-    const newTrip: Trip = {
-        id: 1,
-        name: "test",
-        eventDate: "13.08.1992",
-        startingTime: "12:23",
-        finishingTime: "14:44"
+    const testTrip: Trip = {
+        id: Date.now(), // Erzeugt automatisch eine einzigartige ID
+        name: "Spanien Urlaub",
+        eventDate: "15.09.2026",
+        startingTime: "06:30",
+        finishingTime: "11:45"
     };
 
-    storage.set<Trip>('current_trip', newTrip);
+    addTrip(testTrip);
+    console.log(getTrips());
+    deleteTrip(1786227620607);
+    localStorage.clear()
 
-    const testTrip = storage.get<Trip>("current_trip");
-
-    console.log(testTrip)
 });
