@@ -1,3 +1,5 @@
+import { storage } from '/utils/storage';
+
 export interface Trip{
     id: number
     name: string
