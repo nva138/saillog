@@ -14,6 +14,9 @@ import {
   IonAlert,
   IonButton
 } from '@ionic/vue';
+import {useRoute, useRouter} from "vue-router";
+
+const router = useRouter();
 
 const tripList = ref<Trip[]>([]);
 const isAlertOpen = ref(false);
@@ -53,6 +56,10 @@ const alertButton = [
   }
 ];
 
+const navigateToTripDetails = (tripId: number) => {
+  router.push(`/tripDetails/${tripId}`);
+}
+
 
 
 onMounted(() => (
@@ -73,14 +80,13 @@ onMounted(() => (
         <p>You haven't done any trips so far</p>
       </div>
       <ion-list v-else>
-        <ion-item v-for="trip in tripList" :key="trip.id">
+        <ion-item button v-for="trip in tripList" :key="trip.id" @click="navigateToTripDetails(trip.id)">
           <ion-label>
             {{ trip.name }}
           </ion-label>
         </ion-item>
       </ion-list>
       <ion-button fill="outline" @click="setAlertOpen(true)">start trip!</ion-button>
-
       <ion-alert
           :is-open="isAlertOpen"
           header="Neuen Trip starten"
@@ -89,9 +95,6 @@ onMounted(() => (
           :buttons="alertButton"
           @didDismiss="setAlertOpen(false)"
       ></ion-alert>
-
     </ion-content>
   </ion-page>
 </template>
-
-<style></style>

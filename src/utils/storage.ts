@@ -24,6 +24,13 @@ export function getTrips() {
 
 }
 
+export function getTripById(id: number) {
+    const tripsList = storage.get<Trip[]>("trips") ?? [];
+    return tripsList.find(trip => trip.id === id);
+
+}
+
+
 export function deleteTrip(id: number ) {
     const tripsList = storage.get<Trip[]>("trips") ?? [];
     const filteredTrips = tripsList.filter(trip => trip.id !== id);
