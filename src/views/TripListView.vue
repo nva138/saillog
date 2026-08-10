@@ -52,12 +52,17 @@ const alertButton = [
           };
       addTrip(newTrip);
       tripList.value = getTrips();
+      navigateToLiveTrip(newTrip.id)
     }
   }
 ];
 
 const navigateToTripDetails = (tripId: number) => {
   router.push(`/tripDetails/${tripId}`);
+}
+
+const navigateToLiveTrip = (tripId: number) => {
+  router.push(`/liveTrip/${tripId}`);
 }
 
 

@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import TripListView from "@/views/TripListView.vue";
 import TripDetailsView from "@/views/TripDetailsView.vue";
+import LiveTripView from "@/views/LiveTripView.vue";
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -18,6 +19,12 @@ const routes: Array<RouteRecordRaw> = [
         path: `/tripDetails/:id`,
         name: "TripDetails",
         component: TripDetailsView
+    },
+
+    {
+        path: '/liveTrip/:id',
+        name: 'LiveTrip',
+        component: LiveTripView
     }
 ]
 

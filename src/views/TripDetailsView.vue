@@ -7,10 +7,18 @@ import {
   IonContent, IonList, IonItem, IonLabel,
 } from '@ionic/vue';
 import {useRoute} from "vue-router";
-import { getTripById } from "@/utils/storage";
+import {getTripById, getLogbookEntriesByTripId} from "@/utils/storage";
+import {onMounted, ref} from "vue";
+import {LogbookEntry} from "@/types/LogbookEntry";
 
 const route = useRoute();
 const trip = getTripById(Number(route.params.id));
+const logbookEntries = ref<LogbookEntry[]>([])
+
+onMounted(() =>
+    logbookEntries.value = getLogbookEntriesByTripId(Number(route.params.id))
+);
+
 </script>
 
 <template>
@@ -32,6 +40,11 @@ const trip = getTripById(Number(route.params.id));
               {{trip?.startingTime}}
               {{trip?.finishingTime}}
             </ion-label>
+          </ion-item>
+        </ion-list>
+        <ion-list>
+          <ion-item v-for="entry in logbookEntries" :key="entry.id">
+            <ion-label>{{ entry.note }} {{ entry.time }}</ion-label>
           </ion-item>
         </ion-list>
       </ion-content>
