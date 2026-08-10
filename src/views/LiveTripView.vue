@@ -3,6 +3,7 @@ import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonAler
 import {useRoute} from "vue-router";
 import {addLogbookEntry, getLogbookEntriesByTripId, getTripById} from "@/utils/storage";
 import {ref} from "vue";
+import { Geolocation } from '@capacitor/geolocation';
 
 const route = useRoute();
 const trip = getTripById(Number(route.params.id));
@@ -26,19 +27,21 @@ const alertButton = [
   },
   {
     text: "add Logbook entry",
-    handler: (data: {tripNote: string}) => {
+    handler: async (data: {tripNote: string}) => {
       if(!data.tripNote || data.tripNote.trim() === "") {
         return false;
       }
+
+      const position = await Geolocation.getCurrentPosition();
       const newNote =
           {
             id: Date.now(),
             tripId: Number(route.params.id),
             time: new Date().toISOString() ,
-            lat: 0,
-            lon: 0,
-            speed: 0,
-            course: 0,
+            lat: position.coords.latitude,
+            lon: position.coords.longitude,
+            speed: position.coords.speed ?? 0,
+            course: position.coords.heading ?? 0,
             note: data.tripNote
           };
 
