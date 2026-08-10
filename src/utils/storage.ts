@@ -1,5 +1,6 @@
 
 import { Trip } from "@/types/Trip"
+import {LogbookEntry, LogBookEntry} from "@/types/LogBookEntry"
 
 export const storage = {
 
@@ -11,6 +12,17 @@ export const storage = {
         const item = localStorage.getItem(key);
         return item ? (JSON.parse(item) as T) : null
     },
+}
+
+export function addLogbookEntry (logbookEntry: LogbookEntry) {
+   const logbookList = storage.get<LogbookEntry[]>("Entrys") ?? [];
+   logbookList.push(logbookEntry)
+    storage.set("Entrys", logbookList)
+}
+
+export function getLogbookEntriesByTripId (tripId: number) {
+    const logbookList = storage.get<LogbookEntry[]>("Entrys") ?? [];
+    return logbookList.filter(logbookEntry => logbookEntry.tripId === tripId);
 }
 
 export function addTrip (trip: Trip) {
@@ -29,7 +41,6 @@ export function getTripById(id: number) {
     return tripsList.find(trip => trip.id === id);
 
 }
-
 
 export function deleteTrip(id: number ) {
     const tripsList = storage.get<Trip[]>("trips") ?? [];
