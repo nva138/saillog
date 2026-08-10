@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonAlert} from "@ionic/vue";
 import {useRoute} from "vue-router";
-import {addLogbookEntry, getTripById} from "@/utils/storage";
+import {addLogbookEntry, getLogbookEntriesByTripId, getTripById} from "@/utils/storage";
 import {onMounted, ref} from "vue";
 import { Geolocation } from '@capacitor/geolocation';
 import L from 'leaflet';
@@ -17,6 +17,10 @@ onMounted(() => {
   const map = L.map("map").setView([48.21, 16.37], 13);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map)
   setTimeout(() => map.invalidateSize(), 100);
+  const logbookEnty = getLogbookEntriesByTripId(Number(route.params.id));
+  logbookEnty.forEach((item) => {
+    L.marker([item.lat, item.lon]).addTo(map).bindPopup(item.note ?? "");
+  })
 })
 
 
