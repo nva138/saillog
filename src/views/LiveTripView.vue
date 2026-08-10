@@ -1,15 +1,24 @@
 <script setup lang="ts">
 import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonAlert} from "@ionic/vue";
 import {useRoute} from "vue-router";
-import {addLogbookEntry, getLogbookEntriesByTripId, getTripById} from "@/utils/storage";
-import {ref} from "vue";
+import {addLogbookEntry, getTripById} from "@/utils/storage";
+import {onMounted, ref} from "vue";
 import { Geolocation } from '@capacitor/geolocation';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 const route = useRoute();
 const trip = getTripById(Number(route.params.id));
 const isAlertOpen = ref(false);
 const setAlertOpen = (state: boolean) => {
   isAlertOpen.value = state;}
+
+onMounted(() => {
+  const map = L.map("map").setView([48.21, 16.37], 13);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map)
+  setTimeout(() => map.invalidateSize(), 100);
+})
+
 
 
   const alertInput = [
@@ -60,6 +69,7 @@ const alertButton = [
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
+    <div id="map" style="height: 400px"></div>
     <ion-button fill="outline" @click="setAlertOpen(true)">Add new note!</ion-button>
     <ion-alert
         :is-open="isAlertOpen"
