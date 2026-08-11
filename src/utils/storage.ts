@@ -1,6 +1,6 @@
 
 import { Trip } from "@/types/Trip"
-import {LogbookEntry, LogBookEntry} from "@/types/LogBookEntry"
+import {LogbookEntry} from "@/types/LogbookEntry"
 
 export const storage = {
 

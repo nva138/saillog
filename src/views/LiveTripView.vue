@@ -2,16 +2,19 @@
 import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonAlert} from "@ionic/vue";
 import {useRoute} from "vue-router";
 import {addLogbookEntry, getLogbookEntriesByTripId, getTripById} from "@/utils/storage";
-import {onMounted, ref} from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import { Geolocation } from '@capacitor/geolocation';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { TrackPoint } from "@/types/TrackPoint";
 
 const route = useRoute();
 const trip = getTripById(Number(route.params.id));
 const isAlertOpen = ref(false);
+const trackPoints = ref<TrackPoint[]>([])
 const setAlertOpen = (state: boolean) => {
   isAlertOpen.value = state;}
+let watchId: string;
 
 onMounted(() => {
   const map = L.map("map").setView([48.21, 16.37], 13);
@@ -21,9 +24,25 @@ onMounted(() => {
   logbookEnty.forEach((item) => {
     L.marker([item.lat, item.lon]).addTo(map).bindPopup(item.note ?? "");
   })
+
+  const line = L.polyline([]).addTo(map);
+  Geolocation.watchPosition({}, (position) => {
+    if (position) {
+      trackPoints.value.push({
+        id: Date.now(),
+        tripId: Number(route.params.id),
+        lat: position.coords.latitude,
+        lon: position.coords.longitude,
+        time: new Date().toISOString()
+      })
+      line.setLatLngs(trackPoints.value.map(p => [p.lat, p.lon]));
+    }
+  }).then(id => watchId = id);
 })
 
-
+onUnmounted(() => {
+  Geolocation.clearWatch({ id: watchId });
+})
 
   const alertInput = [
     {
