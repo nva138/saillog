@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonAlert} from "@ionic/vue";
-import {useRoute} from "vue-router";
-import {addLogbookEntry, getLogbookEntriesByTripId, getTripById, saveTrackPoints, loadTrackPointsForTrip} from "@/utils/storage";
+import {useRoute, useRouter} from "vue-router";
+import {addLogbookEntry, getLogbookEntriesByTripId, getTripById, saveTrackPoints, loadTrackPointsForTrip, setTripEndTime} from "@/utils/storage";
 import {onMounted, onUnmounted, ref} from "vue";
 import { Geolocation } from '@capacitor/geolocation';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { TrackPoint } from "@/types/TrackPoint";
 
+
+const router = useRouter();
 const route = useRoute();
 const trip = getTripById(Number(route.params.id));
 const isAlertOpen = ref(false);
@@ -16,6 +18,12 @@ const setAlertOpen = (state: boolean) => {
   isAlertOpen.value = state;}
 let watchId: string;
 let map: L.Map;
+
+const finishTrip = () => {
+  setTripEndTime(Number(route.params.id));
+  router.push("/home");
+};
+
 
 onMounted(() => {
   map = L.map("map").setView([48.21, 16.37], 13);
@@ -115,6 +123,7 @@ const alertButton = [
         :buttons="alertButton"
         @didDismiss="setAlertOpen(false)"
     ></ion-alert>
+    <ion-button fill="outline" @click="finishTrip()">Finish trip</ion-button>
   </ion-content>
 </ion-page>
 </template>

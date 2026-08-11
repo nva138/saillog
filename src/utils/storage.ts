@@ -15,6 +15,7 @@ export const storage = {
     },
 }
 
+
 export function saveTrackPoints (trackPoint: TrackPoint) {
     const trackPoints = storage.get<TrackPoint[]>("Points") ?? [];
     trackPoints.push(trackPoint);
@@ -60,3 +61,13 @@ export function deleteTrip(id: number ) {
     storage.set<Trip[]>("trips", filteredTrips);
 
 }
+
+export function setTripEndTime (id: number) {
+    const tripsList = storage.get<Trip[]>("trips") ?? [];
+    const trip = tripsList.find(trip => trip.id === id);
+    if (trip) {
+        trip.finishingTime = new Date().toISOString();
+        storage.set("trips", tripsList);
+    }
+}
+
