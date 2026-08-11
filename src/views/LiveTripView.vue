@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonAlert} from "@ionic/vue";
 import {useRoute} from "vue-router";
-import {addLogbookEntry, getLogbookEntriesByTripId, getTripById} from "@/utils/storage";
+import {addLogbookEntry, getLogbookEntriesByTripId, getTripById, saveTrackPoints, loadTrackPointsForTrip} from "@/utils/storage";
 import {onMounted, onUnmounted, ref} from "vue";
 import { Geolocation } from '@capacitor/geolocation';
 import L from 'leaflet';
@@ -15,9 +15,10 @@ const trackPoints = ref<TrackPoint[]>([])
 const setAlertOpen = (state: boolean) => {
   isAlertOpen.value = state;}
 let watchId: string;
+let map: L.Map;
 
 onMounted(() => {
-  const map = L.map("map").setView([48.21, 16.37], 13);
+  map = L.map("map").setView([48.21, 16.37], 13);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map)
   setTimeout(() => map.invalidateSize(), 100);
   const logbookEnty = getLogbookEntriesByTripId(Number(route.params.id));
@@ -26,22 +27,32 @@ onMounted(() => {
   })
 
   const line = L.polyline([]).addTo(map);
+  trackPoints.value = loadTrackPointsForTrip(Number(route.params.id));
+  line.setLatLngs(trackPoints.value.map(p => [p.lat, p.lon]))
+  let centered = false;
   Geolocation.watchPosition({}, (position) => {
     if (position) {
-      trackPoints.value.push({
+      const point = {
         id: Date.now(),
         tripId: Number(route.params.id),
         lat: position.coords.latitude,
         lon: position.coords.longitude,
         time: new Date().toISOString()
-      })
+      };
+      if (!centered) {
+        map.setView([point.lat, point.lon], 20);
+        centered = true;
+      }
+      trackPoints.value.push(point);
       line.setLatLngs(trackPoints.value.map(p => [p.lat, p.lon]));
+      saveTrackPoints(point);
     }
   }).then(id => watchId = id);
 })
 
 onUnmounted(() => {
   Geolocation.clearWatch({ id: watchId });
+  map.remove();
 })
 
   const alertInput = [
@@ -64,20 +75,22 @@ const alertButton = [
         return false;
       }
 
-      const position = await Geolocation.getCurrentPosition();
+      const position = trackPoints.value[trackPoints.value.length - 1];
+      if (!position) return false;
       const newNote =
           {
             id: Date.now(),
             tripId: Number(route.params.id),
             time: new Date().toISOString() ,
-            lat: position.coords.latitude,
-            lon: position.coords.longitude,
-            speed: position.coords.speed ?? 0,
-            course: position.coords.heading ?? 0,
+            lat: position.lat,
+            lon: position.lon,
+            speed: 0,
+            course: 0,
             note: data.tripNote
           };
 
-      addLogbookEntry(newNote)
+      addLogbookEntry(newNote);
+
     }
   }
 ];

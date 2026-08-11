@@ -1,6 +1,7 @@
 
 import { Trip } from "@/types/Trip"
 import {LogbookEntry} from "@/types/LogbookEntry"
+import {TrackPoint} from "@/types/TrackPoint";
 
 export const storage = {
 
@@ -12,6 +13,17 @@ export const storage = {
         const item = localStorage.getItem(key);
         return item ? (JSON.parse(item) as T) : null
     },
+}
+
+export function saveTrackPoints (trackPoint: TrackPoint) {
+    const trackPoints = storage.get<TrackPoint[]>("Points") ?? [];
+    trackPoints.push(trackPoint);
+    storage.set("Points", trackPoints)
+}
+
+export function loadTrackPointsForTrip (tripId: number) {
+    const trackPoints = storage.get<TrackPoint[]>("Points") ?? [];
+    return trackPoints.filter(trackPoint => trackPoint.tripId === tripId);
 }
 
 export function addLogbookEntry (logbookEntry: LogbookEntry) {
