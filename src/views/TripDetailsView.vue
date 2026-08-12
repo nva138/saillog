@@ -4,11 +4,12 @@ import {
   IonHeader,
   IonToolbar,
   IonTitle,
-  IonContent, IonList, IonItem, IonLabel,
+  IonContent, IonList, IonItem, IonLabel, IonSegment, IonSegmentButton,
+  IonCard, IonCardHeader, IonCardSubtitle, IonCardContent
 } from '@ionic/vue';
 import {useRoute} from "vue-router";
 import {getTripById, getLogbookEntriesByTripId, loadTrackPointsForTrip} from "@/utils/storage";
-import {onMounted, onUnmounted, ref} from "vue";
+import {onMounted, onUnmounted, ref, watch} from "vue";
 import {LogbookEntry} from "@/types/LogbookEntry";
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -16,7 +17,13 @@ import 'leaflet/dist/leaflet.css';
 const route = useRoute();
 const trip = getTripById(Number(route.params.id));
 const logbookEntries = ref<LogbookEntry[]>([])
+const view = ref<'map' | 'list'>('map');
 let map: L.Map
+
+const formatTime = (iso: string) =>
+    new Date(iso).toLocaleString('de-DE', {
+      day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
 
 onMounted(() => {
       map = L.map("detailMap").setView([48.21, 16.37], 13);
@@ -35,6 +42,12 @@ onMounted(() => {
 
 onUnmounted(() => {
   map.remove();
+});
+
+watch(view, (v) => {
+  if (v === 'map') {
+    setTimeout(() => map.invalidateSize(), 100);
+  }
 });
 
 </script>
@@ -60,12 +73,37 @@ onUnmounted(() => {
             </ion-label>
           </ion-item>
         </ion-list>
-        <div id="detailMap" style="height: 400px"></div>
-        <ion-list>
-          <ion-item v-for="entry in logbookEntries" :key="entry.id">
-            <ion-label>{{ entry.note }} {{ entry.time }}</ion-label>
-          </ion-item>
-        </ion-list>
+        <ion-segment v-model="view">
+          <ion-segment-button value="map"><ion-label>Karte</ion-label></ion-segment-button>
+          <ion-segment-button value="list"><ion-label>Liste</ion-label></ion-segment-button>
+        </ion-segment>
+        <div id="detailMap" v-show="view === 'map'" style="height: 400px"></div>
+        <div v-show="view === 'list'">
+          <ion-card v-for="entry in logbookEntries" :key="entry.id">
+            <ion-card-header>
+              <ion-card-subtitle>{{ formatTime(entry.time) }}</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <p class="note-text">{{ entry.note || "Keine Notiz" }}</p>
+              <p class="note-meta">
+                {{ entry.lat.toFixed(4) }}, {{ entry.lon.toFixed(4) }} · {{ entry.speed }} kn · {{ entry.course }}°
+              </p>
+            </ion-card-content>
+          </ion-card>
+        </div>
       </ion-content>
   </ion-page>
 </template>
+
+<style scoped>
+.note-text {
+  font-size: 1rem;
+  margin: 0 0 6px;
+  color: var(--ion-text-color);
+}
+.note-meta {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  margin: 0;
+}
+</style>
