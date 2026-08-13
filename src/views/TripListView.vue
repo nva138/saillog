@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import {addTrip, getTrips} from "@/utils/storage";
+import {addTrip, getTrips, deleteTrip} from "@/utils/storage";
 import type { Trip } from "@/types/Trip";
 import {
   IonPage,
@@ -57,6 +57,11 @@ const alertButton = [
   }
 ];
 
+function deleteHandler(id: number) {
+deleteTrip(id);
+tripList.value = getTrips()
+}
+
 const navigateToTripDetails = (tripId: number) => {
   router.push(`/tripDetails/${tripId}`);
 }
@@ -89,6 +94,7 @@ onMounted(() => (
           <ion-label>
             {{ trip.name }}
           </ion-label>
+          <ion-button fill="outline" @click.stop="deleteHandler(trip.id)">X</ion-button>
         </ion-item>
       </ion-list>
       <ion-button fill="outline" @click="setAlertOpen(true)">start trip!</ion-button>
