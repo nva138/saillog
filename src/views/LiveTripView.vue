@@ -66,7 +66,7 @@ onUnmounted(() => {
   const alertInput = [
     {
       name: "tripNote",
-      type: "text" as const,
+      type: "textarea" as const,
       placeholder: "Enter a note"
     }
   ];
