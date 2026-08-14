@@ -67,17 +67,17 @@ onUnmounted(() => {
     {
       name: "tripNote",
       type: "text" as const,
-      placeholder: "Add a new Note!"
+      placeholder: "Enter a note"
     }
   ];
 
 const alertButton = [
   {
-    text: "cancel",
+    text: "Cancel",
     role: "cancel"
   },
   {
-    text: "add Logbook entry",
+    text: "Save entry",
     handler: async (data: {tripNote: string}) => {
       if(!data.tripNote || data.tripNote.trim() === "") {
         return false;
@@ -109,16 +109,16 @@ const alertButton = [
 <ion-page>
   <ion-header>
     <ion-toolbar>
-      <ion-title>LiveTrip </ion-title>
+      <ion-title>Current Trip</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
     <div id="map" style="height: 400px"></div>
-    <ion-button fill="outline" @click="setAlertOpen(true)">Add new note!</ion-button>
+    <ion-button fill="outline" @click="setAlertOpen(true)">Add note</ion-button>
     <ion-alert
         :is-open="isAlertOpen"
-        header="Add Note"
-        sub-header="Add new note"
+        header="New note"
+        sub-header="Add a logbook entry"
         :inputs="alertInput"
         :buttons="alertButton"
         @didDismiss="setAlertOpen(false)"

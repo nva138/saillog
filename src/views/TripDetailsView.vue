@@ -74,8 +74,8 @@ watch(view, (v) => {
           </ion-item>
         </ion-list>
         <ion-segment v-model="view">
-          <ion-segment-button value="map"><ion-label>Karte</ion-label></ion-segment-button>
-          <ion-segment-button value="list"><ion-label>Liste</ion-label></ion-segment-button>
+          <ion-segment-button value="map"><ion-label>Map</ion-label></ion-segment-button>
+          <ion-segment-button value="list"><ion-label>List</ion-label></ion-segment-button>
         </ion-segment>
         <div id="detailMap" v-show="view === 'map'" style="height: 400px"></div>
         <div v-show="view === 'list'">
@@ -84,7 +84,7 @@ watch(view, (v) => {
               <ion-card-subtitle>{{ formatTime(entry.time) }}</ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
-              <p class="note-text">{{ entry.note || "Keine Notiz" }}</p>
+              <p class="note-text">{{ entry.note || "No note" }}</p>
               <p class="note-meta">
                 {{ entry.lat.toFixed(4) }}, {{ entry.lon.toFixed(4) }} · {{ entry.speed }} kn · {{ entry.course }}°
               </p>

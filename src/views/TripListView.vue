@@ -28,13 +28,13 @@ const alertInput = [
   {
     name: "tripName",
     type: "text" as const,
-    placeholder: "Trip in Italy"
+    placeholder: "Trip name"
   }
 ];
 
 const alertButton = [
     {
-      text: "cancel",
+      text: "Cancel",
       role:"cancel"
 },
   {
@@ -82,12 +82,12 @@ onMounted(() => (
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Meine Trips</ion-title>
+        <ion-title>My Trips</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
       <div v-if="tripList.length === 0" class="ion-text-center ion-padding">
-        <p>You haven't done any trips so far</p>
+        <p>No trips recorded yet.</p>
       </div>
       <ion-list v-else>
         <ion-item button v-for="trip in tripList" :key="trip.id" @click="navigateToTripDetails(trip.id)">
@@ -97,11 +97,11 @@ onMounted(() => (
           <ion-button fill="outline" @click.stop="deleteHandler(trip.id)">X</ion-button>
         </ion-item>
       </ion-list>
-      <ion-button fill="outline" @click="setAlertOpen(true)">start trip!</ion-button>
+      <ion-button fill="outline" @click="setAlertOpen(true)">Start trip</ion-button>
       <ion-alert
           :is-open="isAlertOpen"
-          header="Neuen Trip starten"
-          sub-header="Wohin geht die Reise?"
+          header="Start a new trip"
+          sub-header="Where are you headed?"
           :inputs="alertInput"
           :buttons="alertButton"
           @didDismiss="setAlertOpen(false)"
