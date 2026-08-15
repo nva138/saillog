@@ -124,6 +124,7 @@ const alertButton = [
     <ion-button fill="outline" @click="setAlertOpen(true)">Add note</ion-button>
     <ion-alert
         :is-open="isAlertOpen"
+        css-class="tall-note-alert"
         header="New note"
         sub-header="Add a logbook entry"
         :inputs="alertInput"

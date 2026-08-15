@@ -5,7 +5,7 @@ import {
   IonToolbar,
   IonTitle,
   IonContent, IonList, IonItem, IonLabel, IonSegment, IonSegmentButton,
-  IonCard, IonCardHeader, IonCardSubtitle, IonCardContent, IonButton
+  IonCard, IonCardHeader, IonCardSubtitle, IonCardContent, IonButton, IonButtons, IonBackButton
 } from '@ionic/vue';
 import {useRoute} from "vue-router";
 import {
@@ -78,6 +78,9 @@ watch(view, (v) => {
   <ion-page>
       <ion-header>
         <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-back-button default-href="/home"></ion-back-button>
+          </ion-buttons>
           <ion-title>Trip Details</ion-title>
         </ion-toolbar>
       </ion-header>

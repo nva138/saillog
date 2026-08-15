@@ -1,2 +1,42 @@
 /* For information on how to create your own theme, please refer to:
 http://ionicframework.com/docs/theming/ */
+
+/* --- saillog: helles, maritimes Segel-Design --- */
+:root {
+  /* Primär – Meerblau (Buttons, Akzente) */
+  --ion-color-primary: #14689e;
+  --ion-color-primary-rgb: 20, 104, 158;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #125c8b;
+  --ion-color-primary-tint: #2c77a8;
+
+  /* Sekundär – Wellen-Türkis */
+  --ion-color-secondary: #4ba3c7;
+  --ion-color-secondary-rgb: 75, 163, 199;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #428faf;
+  --ion-color-secondary-tint: #5daccd;
+
+  /* App-Hintergrund – helles Seeweiß */
+  --ion-background-color: #eef6fa;
+  --ion-background-color-rgb: 238, 246, 250;
+
+  /* Text – tiefes Navy */
+  --ion-text-color: #0a2e43;
+  --ion-text-color-rgb: 10, 46, 67;
+
+  /* Toolbar – Rumpf-Navy mit weißer Schrift */
+  --ion-toolbar-background: #0d3b56;
+  --ion-toolbar-color: #ffffff;
+
+  /* Karten & Items – reines Weiß, hebt sich vom Hintergrund ab */
+  --ion-item-background: #ffffff;
+  --ion-card-background: #ffffff;
+}
+
+/* Größeres Notiz-Textfeld im Alert */
+.tall-note-alert textarea.alert-input {
+  min-height: 140px;
+}
