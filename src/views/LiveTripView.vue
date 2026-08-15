@@ -26,7 +26,7 @@ const finishTrip = () => {
 };
 
 
-onMounted(() => {
+onMounted(async () => {
   map = L.map("map").setView([48.21, 16.37], 13);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map)
   setTimeout(() => map.invalidateSize(), 100);
@@ -39,6 +39,7 @@ onMounted(() => {
   trackPoints.value = loadTrackPointsForTrip(Number(route.params.id));
   line.setLatLngs(trackPoints.value.map(p => [p.lat, p.lon]))
   let centered = false;
+  await Geolocation.requestPermissions();
   Geolocation.watchPosition({}, (position, err) => {
     if(err) {
       locationErr.value = true;
