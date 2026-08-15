@@ -39,13 +39,13 @@ onMounted(async () => {
   trackPoints.value = loadTrackPointsForTrip(Number(route.params.id));
   line.setLatLngs(trackPoints.value.map(p => [p.lat, p.lon]))
   let centered = false;
-  await Geolocation.requestPermissions();
-  Geolocation.watchPosition({}, (position, err) => {
+  Geolocation.watchPosition({ enableHighAccuracy: true }, (position, err) => {
     if(err) {
       locationErr.value = true;
       return;
     }
     if (position) {
+      locationErr.value = false;
       const point = {
         id: Date.now(),
         tripId: Number(route.params.id),
@@ -90,7 +90,10 @@ const alertButton = [
       }
 
       const position = trackPoints.value[trackPoints.value.length - 1];
-      if (!position) return false;
+      if (!position) {
+        locationErr.value = true;
+        return;
+      }
       const newNote =
           {
             id: Date.now(),
