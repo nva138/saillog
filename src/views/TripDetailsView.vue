@@ -5,10 +5,16 @@ import {
   IonToolbar,
   IonTitle,
   IonContent, IonList, IonItem, IonLabel, IonSegment, IonSegmentButton,
-  IonCard, IonCardHeader, IonCardSubtitle, IonCardContent
+  IonCard, IonCardHeader, IonCardSubtitle, IonCardContent, IonButton
 } from '@ionic/vue';
 import {useRoute} from "vue-router";
-import {getTripById, getLogbookEntriesByTripId, loadTrackPointsForTrip, calcTripTime} from "@/utils/storage";
+import {
+  getTripById,
+  getLogbookEntriesByTripId,
+  loadTrackPointsForTrip,
+  calcTripTime,
+  deleteTrip, getTrips, deleteLogbookEntriesById
+} from "@/utils/storage";
 import {onMounted, onUnmounted, ref, watch} from "vue";
 import {LogbookEntry} from "@/types/LogbookEntry";
 import L from 'leaflet';
@@ -34,6 +40,11 @@ function formatMS() {
 
   const pad = (num: number) => String(num).padStart(2, "0");
   return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+}
+
+function deleteHandler(id: number) {
+  deleteLogbookEntriesById(id);
+  logbookEntries.value = getLogbookEntriesByTripId(Number(route.params.id));
 }
 
 onMounted(() => {
@@ -102,6 +113,7 @@ watch(view, (v) => {
                 {{ entry.lat.toFixed(4) }}, {{ entry.lon.toFixed(4) }} · {{ entry.speed }} kn · {{ entry.course }}°
               </p>
             </ion-card-content>
+            <ion-button fill="outline" @click="deleteHandler(entry.id)">X</ion-button>
           </ion-card>
         </div>
       </ion-content>

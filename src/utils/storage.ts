@@ -38,6 +38,12 @@ export function getLogbookEntriesByTripId (tripId: number) {
     return logbookList.filter(logbookEntry => logbookEntry.tripId === tripId);
 }
 
+export function deleteLogbookEntriesById (id: number) {
+    const logbookList = storage.get<LogbookEntry[]>("Entrys") ?? [];
+    const filtered = logbookList.filter(logbookEntry => logbookEntry.id !== id);
+    storage.set("Entrys", filtered);
+}
+
 export function addTrip (trip: Trip) {
    const tripsList =  storage.get<Trip[]>("trips") ?? [];
    tripsList.push(trip)
