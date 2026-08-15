@@ -8,7 +8,7 @@ import {
   IonCard, IonCardHeader, IonCardSubtitle, IonCardContent
 } from '@ionic/vue';
 import {useRoute} from "vue-router";
-import {getTripById, getLogbookEntriesByTripId, loadTrackPointsForTrip} from "@/utils/storage";
+import {getTripById, getLogbookEntriesByTripId, loadTrackPointsForTrip, calcTripTime} from "@/utils/storage";
 import {onMounted, onUnmounted, ref, watch} from "vue";
 import {LogbookEntry} from "@/types/LogbookEntry";
 import L from 'leaflet';
@@ -24,6 +24,17 @@ const formatTime = (iso: string) =>
     new Date(iso).toLocaleString('de-DE', {
       day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
     });
+
+function formatMS() {
+  const ms = calcTripTime(Number(route.params.id));
+
+  const hours = Math.floor(ms / 3600000);
+  const minutes = Math.floor((ms % 3600000 / 60000));
+  const seconds = Math.floor((ms % 60000 / 1000));
+
+  const pad = (num: number) => String(num).padStart(2, "0");
+  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+}
 
 onMounted(() => {
       map = L.map("detailMap").setView([48.21, 16.37], 13);
@@ -68,8 +79,10 @@ watch(view, (v) => {
             <ion-label>
               {{ trip?.name }}
               {{trip?.eventDate}}
-              {{trip?.startingTime}}
-              {{trip?.finishingTime}}
+              <p>Duration: {{ formatMS() }}</p>
+              <p>Entries: {{ logbookEntries.length }}</p>
+              {{ trip?.startingTime ? formatTime(trip.startingTime) : '' }}
+              {{ trip?.finishingTime ? formatTime(trip.finishingTime) : '' }}
             </ion-label>
           </ion-item>
         </ion-list>

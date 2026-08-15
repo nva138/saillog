@@ -119,7 +119,7 @@ const alertButton = [
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
-    <ion-text v-if="locationErr" color="danger">Location not available!</ion-text>
+    <ion-text v-if="locationErr" color="danger">Location access denied. Please enable it in your browser settings and reload.</ion-text>
     <div id="map" style="height: 400px"></div>
     <ion-button fill="outline" @click="setAlertOpen(true)">Add note</ion-button>
     <ion-alert

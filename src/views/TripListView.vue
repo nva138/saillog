@@ -48,7 +48,7 @@ const alertButton = [
             id: Date.now(),
             name: data.tripName,
             eventDate: new Date().toLocaleDateString('de-DE'),
-            startingTime: new Date().toLocaleString('de-DE'),
+            startingTime: new Date().toISOString(),
           };
       addTrip(newTrip);
       tripList.value = getTrips();

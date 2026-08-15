@@ -70,4 +70,10 @@ export function setTripEndTime (id: number) {
         storage.set("trips", tripsList);
     }
 }
+export function calcTripTime(id: number) {
+    const tripsList = storage.get<Trip[]>("trips") ?? [];
+    const trip = tripsList.find(trip => trip.id === id);
+    if (!trip || !trip.finishingTime) return 0;
+    return new Date(trip.finishingTime).getTime() - new Date(trip.startingTime).getTime();
+}
 
