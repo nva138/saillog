@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonAlert} from "@ionic/vue";
+import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonAlert, IonText} from "@ionic/vue";
 import {useRoute, useRouter} from "vue-router";
 import {addLogbookEntry, getLogbookEntriesByTripId, getTripById, saveTrackPoints, loadTrackPointsForTrip, setTripEndTime} from "@/utils/storage";
 import {onMounted, onUnmounted, ref} from "vue";
@@ -16,6 +16,7 @@ const isAlertOpen = ref(false);
 const trackPoints = ref<TrackPoint[]>([])
 const setAlertOpen = (state: boolean) => {
   isAlertOpen.value = state;}
+const locationErr = ref(false);
 let watchId: string;
 let map: L.Map;
 
@@ -38,7 +39,11 @@ onMounted(() => {
   trackPoints.value = loadTrackPointsForTrip(Number(route.params.id));
   line.setLatLngs(trackPoints.value.map(p => [p.lat, p.lon]))
   let centered = false;
-  Geolocation.watchPosition({}, (position) => {
+  Geolocation.watchPosition({}, (position, err) => {
+    if(err) {
+      locationErr.value = true;
+      return;
+    }
     if (position) {
       const point = {
         id: Date.now(),
@@ -113,6 +118,7 @@ const alertButton = [
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
+    <ion-text v-if="locationErr" color="danger">Location not available!</ion-text>
     <div id="map" style="height: 400px"></div>
     <ion-button fill="outline" @click="setAlertOpen(true)">Add note</ion-button>
     <ion-alert
