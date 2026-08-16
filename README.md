@@ -3,6 +3,20 @@
 A mobile sailing logbook. It records the sailed route via GPS and ties log entries
 to the track, so every note shows up as a marker on the map where it was written.
 
+## Screenshots
+
+<p align="center">
+  <img src="screenshots/trips.png" width="30%" alt="Trip list with new-trip dialog">
+  &nbsp;
+  <img src="screenshots/map.png" width="30%" alt="Trip detail with GPS track and markers">
+  &nbsp;
+  <img src="screenshots/entries.png" width="30%" alt="Log entries list">
+</p>
+
+<p align="center">
+  <sub>Trip list &nbsp;&middot;&nbsp; Detail view with GPS track &nbsp;&middot;&nbsp; Log entries</sub>
+</p>
+
 ## Features
 
 - Record a live GPS track, drawn as a route on the map in real time
