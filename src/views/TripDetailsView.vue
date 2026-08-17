@@ -4,7 +4,7 @@ import {
   IonHeader,
   IonToolbar,
   IonTitle,
-  IonContent, IonList, IonItem, IonLabel, IonSegment, IonSegmentButton,
+  IonContent, IonLabel, IonSegment, IonSegmentButton,
   IonCard, IonCardHeader, IonCardSubtitle, IonCardContent, IonButton, IonButtons, IonBackButton
 } from '@ionic/vue';
 import {useRoute} from "vue-router";
@@ -88,18 +88,15 @@ watch(view, (v) => {
         <div v-if="!trip" class="ion-text-center ion-padding">
           <p>Trip not found</p>
         </div>
-        <ion-list v-else>
-          <ion-item>
-            <ion-label>
-              {{ trip?.name }}
-              {{trip?.eventDate}}
-              <p>Duration: {{ formatMS() }}</p>
-              <p>Entries: {{ logbookEntries.length }}</p>
-              {{ trip?.startingTime ? formatTime(trip.startingTime) : '' }}
-              {{ trip?.finishingTime ? formatTime(trip.finishingTime) : '' }}
-            </ion-label>
-          </ion-item>
-        </ion-list>
+        <div v-else class="trip-header">
+          <h2 class="trip-name">{{ trip?.name }}</h2>
+          <p class="trip-date">{{ trip?.eventDate }}</p>
+          <p class="trip-stats">{{ formatMS() }} · {{ logbookEntries.length }} entries</p>
+          <p class="trip-times">
+            <span v-if="trip?.startingTime">Started {{ formatTime(trip.startingTime) }}</span>
+            <span v-if="trip?.finishingTime"> · Ended {{ formatTime(trip.finishingTime) }}</span>
+          </p>
+        </div>
         <ion-segment v-model="view">
           <ion-segment-button value="map"><ion-label>Map</ion-label></ion-segment-button>
           <ion-segment-button value="list"><ion-label>List</ion-label></ion-segment-button>
@@ -124,6 +121,33 @@ watch(view, (v) => {
 </template>
 
 <style scoped>
+.trip-header {
+  padding: 4px 4px 14px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 12px;
+}
+.trip-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 2px;
+  color: var(--ion-text-color);
+}
+.trip-date {
+  font-size: 0.85rem;
+  opacity: 0.6;
+  margin: 0 0 10px;
+}
+.trip-stats {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ion-color-primary);
+  margin: 0 0 4px;
+}
+.trip-times {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  margin: 0;
+}
 .note-text {
   font-size: 1rem;
   margin: 0 0 6px;
