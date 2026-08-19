@@ -12,8 +12,10 @@ import {
   IonItem,
   IonLabel,
   IonAlert,
-  IonButton
+  IonButton,
+  IonIcon
 } from '@ionic/vue';
+import { trashOutline } from 'ionicons/icons';
 import {useRoute, useRouter} from "vue-router";
 
 const router = useRouter();
@@ -94,7 +96,9 @@ onMounted(() => (
           <ion-label>
             {{ trip.name }}
           </ion-label>
-          <ion-button fill="outline" @click.stop="deleteHandler(trip.id)">X</ion-button>
+          <ion-button fill="clear" color="danger" @click.stop="deleteHandler(trip.id)">
+            <ion-icon slot="icon-only" :icon="trashOutline"></ion-icon>
+          </ion-button>
         </ion-item>
       </ion-list>
       <ion-button fill="outline" @click="setAlertOpen(true)">Start trip</ion-button>

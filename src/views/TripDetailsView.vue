@@ -5,8 +5,9 @@ import {
   IonToolbar,
   IonTitle,
   IonContent, IonLabel, IonSegment, IonSegmentButton,
-  IonCard, IonCardHeader, IonCardSubtitle, IonCardContent, IonButton, IonButtons, IonBackButton
+  IonCard, IonCardHeader, IonCardSubtitle, IonCardContent, IonButton, IonButtons, IonBackButton, IonIcon
 } from '@ionic/vue';
+import { trashOutline } from 'ionicons/icons';
 import {useRoute} from "vue-router";
 import {
   getTripById,
@@ -113,7 +114,9 @@ watch(view, (v) => {
                 {{ entry.lat.toFixed(4) }}, {{ entry.lon.toFixed(4) }} · {{ entry.speed }} kn · {{ entry.course }}°
               </p>
             </ion-card-content>
-            <ion-button fill="outline" @click="deleteHandler(entry.id)">X</ion-button>
+            <ion-button fill="clear" color="danger" @click="deleteHandler(entry.id)">
+              <ion-icon slot="icon-only" :icon="trashOutline"></ion-icon>
+            </ion-button>
           </ion-card>
         </div>
       </ion-content>
