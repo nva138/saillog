@@ -94,7 +94,8 @@ onMounted(() => (
       <ion-list v-else>
         <ion-item button v-for="trip in tripList" :key="trip.id" @click="navigateToTripDetails(trip.id)">
           <ion-label>
-            {{ trip.name }}
+            <h2>{{ trip.name }}</h2>
+            <p>{{ trip.eventDate }}</p>
           </ion-label>
           <ion-button fill="clear" color="danger" @click.stop="deleteHandler(trip.id)">
             <ion-icon slot="icon-only" :icon="trashOutline"></ion-icon>
